@@ -13,9 +13,13 @@ with TelegramClient(StringSession(sessin), api_id, api_hash) as client:
 @client.on(events.NewMessage)
 async def upd_name(event):
 	while True:
-		now = datetime.datetime.now()
-		n = now.strftime("%l:%M %p")
-		await client(UpdateProfileRequest(first_name=n))
+		now = datetime.datetime.today()
+		now = datetime.datetime.today()
+		hour = str(now.hour)
+		mi = str(now.minute)
+		t = (hour + ":" + mi)
+		
+		await client(UpdateProfileRequest(first_name=t))
 		time.sleep(60)
 client.start()
 client.run_until_disconnected()
