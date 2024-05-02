@@ -1,118 +1,136 @@
-from flask import Flask
-from threading import Thread
-import requests
-from requests import post as pp
-from user_agent import generate_user_agent as gg
-from random import choice as cc
-from random import randrange as rr
-import re
+from pytube import YouTube
+
 import os
+#@PY_87
 
-bob = 'azertyuiopmlkjhgfdsqwxcvbn'
-app = Flask(__name__)
+import telebot 
+import random
+from telebot import types
+#@PY_87
+#المطور
 
-@app.route("/email=<email>")
-def GmailMahos(email):
-    try:
-        n1 = ''.join(cc(bob) for i in range(rr(6, 9)))
-        n2 = ''.join(cc(bob) for i in range(rr(3, 9)))
-        host = ''.join(cc(bob) for i in range(rr(15, 30)))
-        he3 = {
-            "accept": "*/*",
-            "accept-language": "ar-YE,ar;q=0.9,en-IQ;q=0.8,en;q=0.7,en-US;q=0.6",
-            "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
-            "google-accounts-xsrf": "1",
-            "sec-ch-ua": "\"Not)A;Brand\";v=\"24\", \"Chromium\";v=\"116\"",
-            "sec-ch-ua-arch": "\"\"",
-            "sec-ch-ua-bitness": "\"\"",
-            "sec-ch-ua-full-version": "\"116.0.5845.72\"",
-            "sec-ch-ua-full-version-list": "\"Not)A;Brand\";v=\"24.0.0.0\", \"Chromium\";v=\"116.0.5845.72\"",
-            "sec-ch-ua-mobile": "?1",
-            "sec-ch-ua-model": "\"ANY-LX2\"",
-            "sec-ch-ua-platform": "\"Android\"",
-            "sec-ch-ua-platform-version": "\"13.0.0\"",
-            "sec-ch-ua-wow64": "?0",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-origin",
-            "x-chrome-connected": "source=Chrome,eligible_for_consistency=true",
-            "x-client-data": "CJjbygE=",
-            "x-same-domain": "1",
-            "Referrer-Policy": "strict-origin-when-cross-origin",
-            'user-agent': str(gg()),
-        }
+bot = telebot.TeleBot('5295020674:AAFCr5qXMrOVamBRzvnqAlid1bUAxqOJL8Q')
+#@PY_87
+print(' Go Bot /Start ')
+@bot.message_handler(commands=['start'])
+def message1(message):
+    id1 = str(message.from_user.id)
+    #@PY_87
+    #@PY_87
 
-        res1 = requests.get('https://accounts.google.com/signin/v2/usernamerecovery?flowName=GlifWebSignIn&flowEntry=ServiceLogin&hl=en-GB', headers=he3)
-        tok = re.search(r'data-initial-setup-data="%.@.null,null,null,null,null,null,null,null,null,&quot;(.*?)&quot;,null,null,null,&quot;(.*?)&', res1.text).group(2)
-        cookies = {'__Host-GAPS': host}
-        headers = {
-            'authority': 'accounts.google.com',
-            'accept': '*/*',
-            'accept-language': 'en-US,en;q=0.9',
-            'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            'google-accounts-xsrf': '1',
-            'origin': 'https://accounts.google.com',
-            'referer': 'https://accounts.google.com/signup/v2/createaccount?service=mail&continue=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&parent_directed=true&theme=mn&ddm=0&flowName=GlifWebSignIn&flowEntry=SignUp',
-            'user-agent': gg(),
-        }
-        data = {
-            'f.req': '["' + tok + '","' + n1 + '","' + n2 + '","' + n1 + '","' + n2 + '",0,0,null,null,"web-glif-signup",0,null,1,[],1]',
-            'deviceinfo': '[null,null,null,null,null,"NL",null,null,null,"GlifWebSignIn",null,[],null,null,null,null,2,null,0,1,"",null,null,2,2]',
-        }
-        response = pp(
-            'https://accounts.google.com/_/signup/validatepersonaldetails',
-            cookies=cookies,
-            headers=headers,
-            data=data,
-        )
-        tl = str(response.text).split('",null,"')[1].split('"')[0]
-        host = response.cookies.get_dict()['__Host-GAPS']
+
+    
+    ty = types.InlineKeyboardButton(text='دخول البوت',callback_data='ty')
+    kj = types.InlineKeyboardMarkup(keyboard=[[ty]])
+    bot.send_message(message.chat.id,'*اهلا بك في بوت تحميل من اليوتيوب*',parse_mode='markdown',reply_markup=kj)
+
+@bot.callback_query_handler(func=lambda call:True)
+def call(call):
+    if call.data =='ty':
+        nc = types.InlineKeyboardButton(text='تحميل فيديو',callback_data='nc')
+        cn = types.InlineKeyboardButton(text='تحميل مقطع صوتي',callback_data='cn')
+        ncc = types.InlineKeyboardMarkup(row_width=1)
+        ncc.add(nc,cn)
+        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text='*اختار التحميل المناسب*',reply_markup=ncc,parse_mode='markdown')
+    elif call.data =='nc':
+        mk = types.InlineKeyboardButton(text='قناة مطور لبوت',url='https://t.me/ttxxxn')
+        mk1 = types.InlineKeyboardMarkup(row_width=1)
+        mk1.add(mk)
+        message = bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text='*ارسل الان رابط المقطع من فضلك*',reply_markup=mk1,parse_mode='markdown')
+        bot.register_next_step_handler(message,m1,message.id)
+    elif call.data =='cn':
+        mk = types.InlineKeyboardButton(text='قناة البوت',url='https://t.me/ttxxxn')
+        mk1 = types.InlineKeyboardMarkup(row_width=1)
+        mk1.add(mk)
+        message = bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text='*ارسل الان رابط المقطع من فضلك*',reply_markup=mk1,parse_mode='markdown')
+        bot.register_next_step_handler(message,m2,message.id)
+    #@PY_87
+    #@PY_87
+def m1(message,id):
+    id1 = str(message.from_user.id)
+    me = str(message.text)
+    if ('https') in me :
+        #@PY_87
+        #@PY_87
+        ty = types.InlineKeyboardButton(text='مبرمج البوت',url='https://t.me/PY_50')
+        kj = types.InlineKeyboardMarkup(keyboard=[[ty]])
+        bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='*جار التحميل الان..*',reply_markup=kj,parse_mode='markdown')
+        video_url = me
+        yt = YouTube(video_url)
+        video = yt.streams.first()
+        video.download()
+        #@PY_87
+
+    
+        filem = video.default_filename
+     
+        ki='qwertyuioplkjhgfdsazxcvbn'
+        uo = str(''.join(random.choice(ki)for ii in range(4)))
+        #@PY_87
+       
+        namenew = f'{uo}.mp4'
+        os.rename(filem, namenew)
+        bot.send_video(id1,video=open(f'{uo}.mp4','rb'),caption='*تم التحميل بنجاح*',parse_mode='markdown',reply_markup=kj)
+        os.remove(filem)
+        os.remove(f'{uo}.mp4')
+ #@PY_87       
+    else:
+        mi = types.InlineKeyboardButton(text='القائمة الرئسية',callback_data='ty')
+        mi1 = types.InlineKeyboardMarkup(row_width=2);mi1.add(mi)
+        bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='*عذرا ارسل رابط صحيح من فضلك*',parse_mode='markdown',reply_markup=mi1)
+def m2(message,id):
+    id1 = str(message.from_user.id)
+    me = str(message.text)
+    if ('https') in me :
+        ty = types.InlineKeyboardButton(text='مبرمج البوت',url='https://t.me/PY_50')
+        kj = types.InlineKeyboardMarkup(keyboard=[[ty]])
+        bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='*جار التحميل الان..*',reply_markup=kj,parse_mode='markdown')
+        video_url = me
+        yt = YouTube(video_url)
+        video = yt.streams.first()
+        video.download()
+#@PY_87
+    
+        filem = video.default_filename
+     
+        u='qwertyuioplkjhgfdsazxcvbn'
+        rr = str(''.join(random.choice(u)for ii in range(4)))
+        namenew = f'{rr}.mp4'
+        os.rename(filem, namenew)
+        with open(namenew,'rb') as ad:
+            bot.send_audio(id1,ad,caption='*تم التحميل بنجاح*',parse_mode='markdown')
+            os.remove(filem)
+            os.remove(f'{rr}.mp3')   
+            #@PY_87 
+    else:
+        mi = types.InlineKeyboardButton(text='القائمة الرئسية',callback_data='ty')
+        mi1 = types.InlineKeyboardMarkup(row_width=2);mi1.add(mi)
+        bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='*عذرا ارسل رابط صحيح من فضلك*',parse_mode='markdown',reply_markup=mi1)
+#@PY_87
+
+
+
+#@PY_87
+def main():
+    #@PY_87  
+    while True:
         
-        if '@' in email:
-            email = str(email).split('@')[0]
-
-            cookies = {'__Host-GAPS': host}
-            headers = {
-                'authority': 'accounts.google.com',
-                'accept': '*/*',
-                'accept-language': 'en-US,en;q=0.9',
-                'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                'google-accounts-xsrf': '1',
-                'origin': 'https://accounts.google.com',
-                'referer': 'https://accounts.google.com/signup/v2/createusername?service=mail&continue=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&parent_directed=true&theme=mn&ddm=0&flowName=GlifWebSignIn&flowEntry=SignUp&TL=' + tl,
-                'user-agent': gg(),
-            }
-            params = {'TL': tl}
-            data = 'continue=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&ddm=0&flowEntry=SignUp&service=mail&theme=mn&f.req=%5B%22TL%3A' + tl + '%22%2C%22' + email + '%22%2C0%2C0%2C1%2Cnull%2C0%2C5167%5D&azt=AFoagUUtRlvV928oS9O7F6eeI4dCO2r1ig%3A1712322460888&cookiesDisabled=false&deviceinfo=%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%22NL%22%2Cnull%2Cnull%2Cnull%2C%22GlifWebSignIn%22%2Cnull%2C%5B%5D%2Cnull%2Cnull%2Cnull%2Cnull%2C2%2Cnull%2C0%2C1%2C%22%22%2Cnull%2Cnull%2C2%2C2%5D&gmscoreversion=undefined&flowName=GlifWebSignIn&'
-            response = pp(
-                'https://accounts.google.com/_/signup/usernameavailability',
-                params=params,
-                cookies=cookies,
-                headers=headers,
-                data=data,
-            )
-            if '"gf.uar",1' in response.text:
-                return {'By': 'AHMED', 'status': 'Available'}
-            elif '"gf.uar",2' in response.text:
-                return {'By': 'AHMED', 'status': 'NotAvailable'}
-            elif '"er",null,null,null,null,400' in str(response.text):
-                return {'By': 'AHMED', 'status': 'Erorr'}
-            else:
-                return {'By': 'AHMED', 'status': 'Erorr'}
-    except:
-    	return {'By': 'AHMED', 'status': 'Erorr'}
-    	pass
-    	
+        try:
+            
+            bot.polling()
+            
+        except:
+            import os
+            os.system('clear')
+#@PY_87
+            main()
         
+        main()
         
-def run():
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    main()
+    
+main()
 
-  
-def keep_alive():
-  t = Thread(target=run)
-  t.start()
-  
-if __name__ == "__main__":
-	keep_alive()
+
+#حقوق @PY_87 تخمط اضحك  فضيحه صبر شريف وخلي يوزر لمطور
+#@PY_87
